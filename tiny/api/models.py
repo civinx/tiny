@@ -1,5 +1,5 @@
 from django.db import models
-from api.utility import gen
+from api.utility import gen, star_with_http, delete_http
 
 
 class Record(models.Model):
@@ -12,9 +12,16 @@ class Record(models.Model):
         ordering = ('created',)
 
     def save(self, *args, **kwargs):
-        print(self.old_url)
-        print(self.id)
+        # 存入数据库时，统一删去http开头，防止同一个网站用http/https生成不同的短网址
+        self.old_url = delete_http(self.old_url)
+
+        # 如果原网址已经存在，那不修改数据库，直接返回
+        if Record.objects.filter(old_url=self.old_url).__len__() != 0:
+            return
+
+        # 将不带短网址的record先插入数据库，获得主键
         super(Record, self).save(*args, **kwargs)
-        print(self.id)
+
+        # 用生成的主键映射成短网址
         Record.objects.filter(id=self.id).update(tiny_url=gen(self.id))
 
