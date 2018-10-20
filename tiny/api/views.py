@@ -21,7 +21,7 @@ class RecordList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = RecordSerializer(data=request.data)
+        serializer = RecordSerializer(data=request.data, context={'request': request})
 
         if serializer.is_valid():
             serializer.save()
@@ -30,8 +30,11 @@ class RecordList(APIView):
 
             record = Record.objects.get(old_url=old_url)
 
+            # 当前域名
+            domain = get_current_site(request).domain
+
             # 当前域名与tiny_url结合
-            base = 'http://{0!s}/'.format(get_current_site(request).domain)
+            base = 'http://{0!s}/'.format(domain)
             record.tiny_url = urljoin(base, record.tiny_url)
 
             # 放入返回结果的serializer中

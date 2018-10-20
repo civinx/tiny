@@ -124,5 +124,5 @@ STATIC_URL = '/static/'
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
-    'EXCEPTION_HANDLER': 'tiny.api.exception_handler',
+    'EXCEPTION_HANDLER': 'api.exception_handler.exception_handler',
 }
