@@ -21,5 +21,5 @@ class RecordSerializer(serializers.ModelSerializer):
 class TinyUrlSerializer(serializers.ModelSerializer):
     class Meta:
         model = Record
-        fields = ('tiny_url',)
+        fields = ('tiny_url', 'old_url')
 

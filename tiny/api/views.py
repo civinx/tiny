@@ -24,10 +24,14 @@ class RecordList(APIView):
         serializer = RecordSerializer(data=request.data, context={'request': request})
 
         if serializer.is_valid():
+            # 如果是新网址，会添加一条record
+            # 如果以前添加过，则不会添加
+            # 所以保证了之后old_url存在
             serializer.save()
 
+            # 通过old_url获取record
+            # 不用id获取的原因是，如果条目之前已经存在，serializer.save()中会直接跳出，而获取不到id
             old_url = delete_http(request.data['old_url'])
-
             record = Record.objects.get(old_url=old_url)
 
             # 当前域名
@@ -37,6 +41,7 @@ class RecordList(APIView):
             base = 'http://{0!s}/'.format(domain)
             record.tiny_url = urljoin(base, record.tiny_url)
 
+            record.old_url = old_url
             # 放入返回结果的serializer中
             tiny_url_serializer = TinyUrlSerializer(record)
 
