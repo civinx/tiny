@@ -80,6 +80,10 @@ detail: string() # 错误信息
 * pipenv shell 进入虚拟环境
 * 配置uwsgi，新建mysite_uwsgi.ini比如
 
+# 测试
+* 使用Postman编写请求和查看返回的Json
+* GET http://localhost:8000/tiny 使用Django REST framework自带的图形界面测试
+
  ```
 [uwsgi]
 socket = :8001
