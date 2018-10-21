@@ -4,7 +4,6 @@ import { MessageService } from './message.service';
 import { Observable, of } from 'rxjs';
 import { Record } from './record';
 import { catchError, map, tap } from 'rxjs/operators';
-import { METHODS } from 'http';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -25,7 +24,8 @@ export class RecordService {
     this.messageService.add(`${message}`);
   }  
 
-  private recordUrl = 'http://127.0.0.1:8000/tiny/';
+  // private recordUrl = 'http://127.0.0.1:8000/tiny/';
+  private recordUrl = 'http://47.100.57.37:8000/tiny/';
 
   generate (record: Record): Observable<Record> {
     return this.http.post<Record>(this.recordUrl, record, httpOptions)
